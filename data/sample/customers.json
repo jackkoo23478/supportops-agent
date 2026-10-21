@@ -1,0 +1,23 @@
+[
+  {
+    "customer_id": "C001",
+    "name": "Amy Chan",
+    "email": "amy.chan@example.com",
+    "tier": "standard",
+    "joined": "2025-03-12"
+  },
+  {
+    "customer_id": "C002",
+    "name": "Ben Lau",
+    "email": "ben.lau@example.com",
+    "tier": "vip",
+    "joined": "2024-11-02"
+  },
+  {
+    "customer_id": "C003",
+    "name": "Carol Wong",
+    "email": "carol.wong@example.com",
+    "tier": "standard",
+    "joined": "2026-01-20"
+  }
+]
