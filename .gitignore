@@ -1,0 +1,21 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+
+# Secrets and local config
+.env
+
+# Runtime output (may contain customer messages)
+traces/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
