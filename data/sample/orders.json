@@ -1,0 +1,56 @@
+[
+  {
+    "order_id": "O1001",
+    "customer_id": "C001",
+    "status": "delivered",
+    "items": [{"sku": "AUD-100", "name": "Wireless Earbuds", "quantity": 1, "unit_price": 59.90}],
+    "total": 59.90,
+    "order_date": "2026-10-15",
+    "delivered_date": "2026-10-18"
+  },
+  {
+    "order_id": "O1002",
+    "customer_id": "C001",
+    "status": "delivered",
+    "items": [{"sku": "ACC-210", "name": "Phone Case", "quantity": 2, "unit_price": 12.00}],
+    "total": 24.00,
+    "order_date": "2026-08-20",
+    "delivered_date": "2026-08-25"
+  },
+  {
+    "order_id": "O1003",
+    "customer_id": "C002",
+    "status": "shipped",
+    "items": [{"sku": "DSK-050", "name": "Laptop Stand", "quantity": 1, "unit_price": 35.00}],
+    "total": 35.00,
+    "order_date": "2026-10-17",
+    "delivered_date": null
+  },
+  {
+    "order_id": "O1004",
+    "customer_id": "C002",
+    "status": "processing",
+    "items": [{"sku": "KBD-300", "name": "Mechanical Keyboard", "quantity": 1, "unit_price": 129.00}],
+    "total": 129.00,
+    "order_date": "2026-10-20",
+    "delivered_date": null
+  },
+  {
+    "order_id": "O1005",
+    "customer_id": "C003",
+    "status": "delivered",
+    "items": [{"sku": "MON-270", "name": "27-inch Monitor", "quantity": 1, "unit_price": 320.00}],
+    "total": 320.00,
+    "order_date": "2026-10-10",
+    "delivered_date": "2026-10-14"
+  },
+  {
+    "order_id": "O1006",
+    "customer_id": "C003",
+    "status": "cancelled",
+    "items": [{"sku": "CAB-010", "name": "USB Cable", "quantity": 3, "unit_price": 8.00}],
+    "total": 24.00,
+    "order_date": "2026-10-12",
+    "delivered_date": null
+  }
+]
