@@ -37,3 +37,12 @@ class Customer(BaseModel):
     email: str
     tier: Literal["standard", "vip"] = "standard"
     joined: date
+
+class IntentResult(BaseModel):
+    intent: Literal["order_status", "refund", "complaint", "other"]
+    order_id: str | None = None
+    use_previous_order: bool = False
+
+
+class ConversationState(BaseModel):
+    last_order_id: str | None = None
