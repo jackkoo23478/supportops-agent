@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "requested_on": "2026-11-06",
+  "cases": [
+    {
+      "id": "verify_packaging_positive",
+      "description": "A focused affirmative packaging question needs only a supported focused answer.",
+      "steps": [{"message": "Is original packaging required for a return?", "expect": {
+        "intent": "policy_question", "required_sources": ["returns.eligibility"],
+        "facts": [{"id": "packaging_required", "description": "Original packaging is required.",
+          "any_patterns": ["^\\s*yes[.!]?\\s*$", "\\boriginal packaging\\b.{0,40}\\b(?:required|necessary|needed|mandatory)\\b", "\\b(?:require[sd]?|need(?:ed)?|must)\\b.{0,60}\\boriginal packaging\\b"],
+          "reject_patterns": ["\\boriginal packaging\\b.{0,20}\\bnot\\s+(?:required|needed|necessary|mandatory)\\b", "\\b(?:do not|don't|does not|doesn't)\\s+(?:need|require)\\b.{0,25}\\boriginal packaging\\b"]}],
+        "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": ["tool.search_policy"]
+      }}]
+    },
+    {
+      "id": "verify_packaging_negative",
+      "description": "Reversing the packaging question must not reverse the policy requirement.",
+      "steps": [{"message": "Can an unused item be returned without its original packaging?", "expect": {
+        "intent": "policy_question", "required_sources": ["returns.eligibility"],
+        "facts": [{"id": "packaging_still_required", "description": "Unused items still require original packaging.",
+          "any_patterns": ["^\\s*no[.!]?\\s*$", "\\b(?:cannot|can't|not eligible|not accepted)\\b", "\\b(?:require[sd]?|need(?:ed)?|must|only)\\b.{0,80}\\boriginal packaging\\b", "\\boriginal packaging\\b.{0,40}\\b(?:required|needed|necessary|mandatory)\\b"],
+          "reject_patterns": ["\\boriginal packaging\\b.{0,20}\\bnot\\s+(?:required|needed|necessary)\\b", "\\b(?:can|may)\\s+(?:be\\s+)?return(?:ed)?.{0,40}without.{0,20}packaging", "\\b(?:do not|don't|does not|doesn't)\\s+(?:need|require)\\b"]}],
+        "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": ["tool.search_policy"]
+      }}]
+    },
+    {
+      "id": "verify_purchase_proof_optional",
+      "description": "Proof of purchase is required, not optional.",
+      "steps": [{"message": "Is proof of purchase optional for returns?", "expect": {
+        "intent": "policy_question", "required_sources": ["returns.eligibility"],
+        "facts": [{"id": "proof_not_optional", "description": "Returns require proof of purchase.",
+          "any_patterns": ["^\\s*no[.!]?\\s*$", "proof of purchase.{0,40}\\b(?:required|needed|necessary|mandatory)\\b", "\\b(?:require[sd]?|need(?:ed)?|must)\\b.{0,60}(?:proof of purchase|receipt)", "\\bnot optional\\b"],
+          "reject_patterns": ["proof of purchase.{0,20}\\bnot\\s+(?:required|needed|necessary)\\b", "proof of purchase\\s+is\\s+optional\\b"]}],
+        "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": ["tool.search_policy"]
+      }}]
+    },
+    {
+      "id": "verify_deadline_purchase_premise",
+      "description": "Correct the purchase-date premise to the delivery starting event.",
+      "steps": [{"message": "Does the 30-day return window start from the purchase date?", "expect": {
+        "intent": "policy_question", "required_sources": ["returns.eligibility"],
+        "facts": [{"id": "delivery_not_purchase", "description": "The standard window starts from delivery.",
+          "any_patterns": ["^\\s*no[.!]?\\s*$", "\\b(?:after|of|from|following|since|upon|on)\\s+(?:the\\s+)?delivery\\b", "\\b(?:when|once)\\b.{0,50}\\b(?:delivered|received)\\b"],
+          "reject_patterns": []}],
+        "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": ["tool.search_policy"]
+      }}]
+    },
+    {
+      "id": "verify_fifty_approval_policy",
+      "description": "Exactly USD 50 can qualify for automatic approval.",
+      "steps": [{"message": "Does an eligible USD 50.00 refund require human approval?", "expect": {
+        "intent": "policy_question", "required_sources": ["refunds.approval"],
+        "facts": [{"id": "fifty_automatic_limit", "description": "Eligible USD 50 refunds may be approved automatically.",
+          "any_patterns": ["^\\s*no[.!]?\\s*$", "\\b(?:automatic|automatically)\\b", "\\b(?:not|without)\\b.{0,40}\\bhuman approval\\b"],
+          "reject_patterns": ["\\bnot\\s+(?:eligible for\\s+)?automatic(?:ally)?\\b", "\\bcannot be approved automatically\\b"]}],
+        "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": ["tool.search_policy"]
+      }}]
+    },
+    {
+      "id": "verify_fifty_one_cent_approval_policy",
+      "description": "USD 50.01 lies above the automatic approval boundary.",
+      "steps": [{"message": "Does an eligible USD 50.01 refund require human approval?", "expect": {
+        "intent": "policy_question", "required_sources": ["refunds.approval"],
+        "facts": [{"id": "above_fifty_needs_approval", "description": "Amounts above USD 50 need human approval.",
+          "any_patterns": ["^\\s*yes[.!]?\\s*$", "\\b(?:require[sd]?|need[sd]?|must)\\b.{0,50}\\b(?:human|manual)\\b", "\\b(?:human|manual) approval\\b.{0,30}\\b(?:required|needed|necessary)\\b"],
+          "reject_patterns": ["\\b(?:human|manual) approval\\s+is\\s+not\\s+(?:required|needed)\\b"]}],
+        "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": ["tool.search_policy"]
+      }}]
+    },
+    {
+      "id": "verify_processing_start_event",
+      "description": "Processing follows receipt and inspection, not request submission alone.",
+      "steps": [{"message": "Does refund processing start when I submit the request?", "expect": {
+        "intent": "policy_question", "required_sources": ["refunds.processing"],
+        "facts": [{"id": "processing_after_inspection", "description": "Processing starts after the returned item is received and inspected.",
+          "any_patterns": ["^\\s*no[.!]?\\s*$", "\\b(?:after|following|once|upon)\\b.{0,110}\\b(?:inspection|inspected)\\b"],
+          "reject_patterns": []}],
+        "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": ["tool.search_policy"]
+      }}]
+    },
+    {
+      "id": "verify_alternative_refund_account",
+      "description": "The policy refunds the original payment method, without promising another account.",
+      "steps": [{"message": "Can my refund be paid into a different bank account?", "expect": {
+        "intent": "policy_question", "required_sources": ["refunds.processing"],
+        "facts": [{"id": "original_payment_method", "description": "An approved refund uses the original payment method.",
+          "any_patterns": ["^\\s*no[.!]?\\s*$", "\\boriginal payment method\\b"],
+          "reject_patterns": ["\\b(?:can|may)\\s+(?:be\\s+)?(?:paid|issued|sent|refunded)\\s+(?:to|into)\\s+(?:a\\s+)?different\\b"]}],
+        "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": ["tool.search_policy"]
+      }}]
+    }
+  ]
+}

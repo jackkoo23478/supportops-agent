@@ -10,9 +10,17 @@ dist/
 
 # Secrets and local config
 .env
+.env.*
+!.env.example
 
 # Runtime output (may contain customer messages)
 traces/
+data/runtime/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
 
 # Editor / OS
 .vscode/

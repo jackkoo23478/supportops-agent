@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "requested_on": "2026-11-06",
+  "cases": [
+    {
+      "id": "policy_without_packaging",
+      "description": "A missing original box does not satisfy the standard packaging condition.",
+      "steps": [{"message": "Does your return policy allow unused items without their original packaging?", "expect": {
+        "intent": "policy_question", "required_sources": ["returns.eligibility"],
+        "facts": [{
+          "id": "packaging_required", "description": "Standard returns require original packaging.",
+          "any_patterns": ["\\b(?:no|cannot|can't|not eligible|not accepted)\\b", "\\b(?:require[sd]?|need(?:ed)?|must)\\b.{0,80}\\boriginal packaging\\b", "\\boriginal packaging\\b.{0,40}\\b(?:required|necessary)\\b"],
+          "reject_patterns": ["\\b(?:do not|don't|does not|doesn't|not)\\s+(?:need|require)\\b", "\\boriginal packaging\\b.{0,20}\\bnot\\s+(?:required|needed|necessary)\\b", "\\b(?:can|may)\\s+(?:be\\s+)?return.{0,40}without.{0,20}packaging"]
+        }],
+        "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": ["tool.search_policy"]
+      }}]
+    },
+    {
+      "id": "policy_purchase_proof",
+      "description": "The answer must affirm the proof-of-purchase requirement.",
+      "steps": [{"message": "Does your return policy require proof of purchase?", "expect": {
+        "intent": "policy_question", "required_sources": ["returns.eligibility"],
+        "facts": [{
+          "id": "purchase_proof_required", "description": "Proof of purchase is required for returns.",
+          "any_patterns": ["proof of purchase.{0,40}\\b(?:required|needed|necessary)\\b", "\\b(?:require[sd]?|need(?:ed)?|must)\\b.{0,60}(?:proof of purchase|receipt)"],
+          "reject_patterns": ["proof of purchase.{0,20}\\bnot\\s+(?:required|needed|necessary)\\b", "\\b(?:do not|don't)\\s+(?:need|require)\\b.{0,30}(?:proof of purchase|receipt)"]
+        }],
+        "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": ["tool.search_policy"]
+      }}]
+    },
+    {
+      "id": "policy_return_deadline",
+      "description": "Preserve 30 calendar days and the delivery starting event.",
+      "steps": [{"message": "How many calendar days after delivery does the standard return policy allow?", "expect": {
+        "intent": "policy_question", "required_sources": ["returns.eligibility"],
+        "facts": [
+          {"id": "thirty_calendar_days", "description": "The standard window is 30 calendar days.", "any_patterns": ["\\b30\\s+calendar\\s+days?\\b"], "reject_patterns": ["\\b30\\s+business\\s+days?\\b", "\\b60\\s+(?:calendar\\s+)?days?\\b"]},
+          {"id": "delivery_start", "description": "The window starts from delivery, not purchase.", "any_patterns": ["\\b(?:after|of|from|following|since)\\s+(?:the\\s+)?delivery\\b"], "reject_patterns": ["\\bdays?\\s+(?:after|of|from)\\s+(?:the\\s+)?(?:purchase|order date)\\b"]}
+        ],
+        "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": ["tool.search_policy"]
+      }}]
+    },
+    {
+      "id": "policy_unknown_customs",
+      "description": "Do not invent an international customs-duty policy absent from the corpus.",
+      "steps": [{"message": "Who pays international customs duties when returning an item?", "expect": {
+        "intent": "policy_question", "contains": ["I do not have enough policy information to answer that question."],
+        "excludes": ["Source:"], "tickets": 0, "refunds": 0, "transactions": 0,
+        "tool_calls": ["tool.search_policy"]
+      }}]
+    },
+    {
+      "id": "refund_exactly_fifty",
+      "description": "USD 50.00 is within the automatic approval limit.",
+      "steps": [
+        {"message": "Refund O1001 USD 50.00.", "expect": {"intent": "refund", "contains": ["confirm refund"], "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": []}},
+        {"message": "confirm refund", "expect": {"intent": "none", "contains": ["Status: executed", "simulated refund"], "tickets": 0, "refunds": 1, "transactions": 1, "refund_statuses": ["executed"], "refund_orders": ["O1001"], "refund_amounts": ["50.00"], "tool_calls": ["tool.request_refund", "tool.execute_refund"]}}
+      ]
+    },
+    {
+      "id": "refund_fifty_and_one_cent",
+      "description": "USD 50.01 requires human approval and cannot execute while pending.",
+      "steps": [
+        {"message": "Refund O1001 USD 50.01.", "expect": {"intent": "refund", "contains": ["confirm refund"], "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": []}},
+        {"message": "confirm refund", "expect": {"intent": "none", "contains": ["pending_approval"], "tickets": 0, "refunds": 1, "transactions": 0, "refund_statuses": ["pending_approval"], "refund_amounts": ["50.01"], "tool_calls": ["tool.request_refund"]}},
+        {"message": "execute refund", "expect": {"intent": "none", "contains": ["Only approved refunds"], "tickets": 0, "refunds": 1, "transactions": 0, "refund_statuses": ["pending_approval"], "tool_calls": ["tool.execute_refund"]}}
+      ]
+    },
+    {
+      "id": "refund_expired_day_thirty_one",
+      "description": "O1001 delivered on October 18 is outside the window on November 18.",
+      "requested_on": "2026-11-18",
+      "steps": [
+        {"message": "Refund O1001 USD 30.00.", "expect": {"intent": "refund", "contains": ["confirm refund"], "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": []}},
+        {"message": "confirm refund", "expect": {"intent": "none", "contains": ["Status: rejected", "outside the 30-day"], "tickets": 0, "refunds": 1, "transactions": 0, "refund_statuses": ["rejected"], "refund_orders": ["O1001"], "tool_calls": ["tool.request_refund"]}}
+      ]
+    },
+    {
+      "id": "refund_human_rejection",
+      "description": "A rejected human review releases the reservation but cannot execute.",
+      "steps": [
+        {"message": "Refund O1001 USD 59.90.", "expect": {"intent": "refund", "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": []}},
+        {"message": "confirm refund", "expect": {"intent": "none", "tickets": 0, "refunds": 1, "transactions": 0, "refund_statuses": ["pending_approval"], "tool_calls": ["tool.request_refund"]}},
+        {"kind": "review", "decision": "reject", "expect": {"intent": "none", "tickets": 0, "refunds": 1, "transactions": 0, "refund_statuses": ["rejected"], "tool_calls": []}},
+        {"message": "execute refund", "expect": {"intent": "none", "contains": ["Status: rejected", "Only approved refunds"], "tickets": 0, "refunds": 1, "transactions": 0, "refund_statuses": ["rejected"], "tool_calls": ["tool.execute_refund"]}},
+        {"message": "Refund O1001 USD 30.00.", "expect": {"intent": "refund", "contains": ["confirm refund"], "tickets": 0, "refunds": 1, "transactions": 0, "refund_statuses": ["rejected"], "tool_calls": []}},
+        {"message": "confirm refund", "expect": {"intent": "none", "contains": ["Status: executed"], "tickets": 0, "refunds": 2, "transactions": 1, "refund_statuses": ["rejected", "executed"], "refund_orders": ["O1001", "O1001"], "refund_amounts": ["59.90", "30.00"], "tool_calls": ["tool.request_refund", "tool.execute_refund"]}}
+      ]
+    },
+    {
+      "id": "refund_draft_policy_resume",
+      "description": "A policy interruption preserves both order and amount before confirmation.",
+      "steps": [
+        {"message": "Refund O1001 USD 30.00.", "expect": {"intent": "refund", "state": {"pending_refund.order_id": "O1001", "pending_refund.amount": "30.00", "pending_refund.confirmed": false}, "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": []}},
+        {"message": "Do returns require original packaging?", "expect": {"intent": "policy_question", "required_sources": ["returns.eligibility"], "contains": ["original packaging"], "state": {"pending_refund.order_id": "O1001", "pending_refund.amount": "30.00", "pending_refund.confirmed": false}, "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": ["tool.search_policy"]}},
+        {"message": "confirm refund", "expect": {"intent": "none", "contains": ["Status: executed"], "state": {"pending_refund": null}, "tickets": 0, "refunds": 1, "transactions": 1, "refund_orders": ["O1001"], "refund_amounts": ["30.00"], "tool_calls": ["tool.request_refund", "tool.execute_refund"]}}
+      ]
+    },
+    {
+      "id": "refund_change_order_resets_amount",
+      "description": "Changing to O1002 clears the old amount; a new amount needs confirmation.",
+      "steps": [
+        {"message": "Refund O1001 USD 30.00.", "expect": {"intent": "refund", "state": {"pending_refund.order_id": "O1001", "pending_refund.amount": "30.00"}, "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": []}},
+        {"message": "O1002", "expect": {"intent": "none", "contains": ["How much"], "state": {"pending_refund.order_id": "O1002", "pending_refund.amount": null, "pending_refund.confirmed": false}, "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": []}},
+        {"message": "USD 10.00", "expect": {"intent": "none", "contains": ["confirm refund"], "state": {"pending_refund.order_id": "O1002", "pending_refund.amount": "10.00"}, "tickets": 0, "refunds": 0, "transactions": 0, "tool_calls": []}},
+        {"message": "confirm refund", "expect": {"intent": "none", "contains": ["Status: rejected"], "tickets": 0, "refunds": 1, "transactions": 0, "refund_statuses": ["rejected"], "refund_orders": ["O1002"], "refund_amounts": ["10.00"], "tool_calls": ["tool.request_refund"]}}
+      ]
+    }
+  ]
+}

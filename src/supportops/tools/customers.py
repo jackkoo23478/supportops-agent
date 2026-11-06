@@ -2,8 +2,10 @@
 
 from supportops.store import Store
 from supportops.tools.common import error, ok
+from supportops.tracing import traced
 
 
+@traced("tool.get_customer", inputs=("customer_id",))
 def get_customer(store: Store, customer_id: str) -> dict:
     """Look up one customer by id (for example C001), including their order ids."""
     customer = store.get_customer(customer_id.strip().upper())
