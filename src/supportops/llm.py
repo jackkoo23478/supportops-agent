@@ -7,6 +7,7 @@ import httpx
 from pydantic import BaseModel, ValidationError
 
 from supportops.config import Settings
+from supportops.tracing import span, traced
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -34,6 +35,7 @@ class OllamaClient:
         self.model = model
         self._http = httpx.Client(base_url=base_url, timeout=timeout, transport=transport)
 
+    @traced("llm.chat", inputs=("messages", "schema"))
     def chat(self, messages: list[dict], *, schema: dict | None = None) -> ChatResult:
         body = {
             "model": self.model,
@@ -59,16 +61,22 @@ class OllamaClient:
             duration_ms=data.get("total_duration", 0) / 1_000_000,
         )
 
+    @traced("llm.structured", inputs=("messages", "max_retries"))
     def chat_json(self, messages: list[dict], output: type[T], max_retries: int = 2) -> T:
         """Ask for JSON matching `output`. Invalid replies are sent back to the model to fix."""
         messages = list(messages)
         schema = output.model_json_schema()
         last_error: ValidationError | None = None
-        for _ in range(max_retries + 1):
+        for attempt in range(max_retries + 1):
             result = self.chat(messages, schema=schema)
             try:
                 return output.model_validate_json(result.content)
             except ValidationError as e:
+                with span("llm.validation_retry", inputs={
+                    "attempt": attempt + 1, "error": str(e),
+                }) as step:
+                    step.status = "error"
+                    step.error = {"type": "ValidationError", "message": str(e)}
                 last_error = e
                 messages += [
                     {"role": "assistant", "content": result.content},

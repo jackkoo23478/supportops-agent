@@ -1,0 +1,33 @@
+[
+  {
+    "order_id": "O1001",
+    "refundable_balance": "59.90",
+    "facts": {
+      "item_type": "standard", "unused": true, "original_packaging": true,
+      "proof_of_purchase": true, "damaged_or_defective": false,
+      "return_received": true, "inspection_passed": true
+    }
+  },
+  {
+    "order_id": "O1002",
+    "refundable_balance": "24.00",
+    "facts": {
+      "item_type": "standard", "unused": true, "original_packaging": true,
+      "proof_of_purchase": true, "damaged_or_defective": false,
+      "return_received": true, "inspection_passed": true
+    }
+  },
+  {
+    "order_id": "O1003",
+    "refundable_balance": "35.00",
+    "facts": {}
+  },
+  {
+    "order_id": "O1005",
+    "refundable_balance": "320.00",
+    "facts": {
+      "item_type": "standard", "unused": true, "original_packaging": true,
+      "proof_of_purchase": true, "damaged_or_defective": true
+    }
+  }
+]

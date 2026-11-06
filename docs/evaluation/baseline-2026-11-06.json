@@ -1,0 +1,495 @@
+{
+  "schema_version": 1,
+  "run_id": "20261106T113704Z-ac61f1f5",
+  "status": "completed",
+  "model": "qwen2.5:7b",
+  "provider": "ollama",
+  "requested_on": "2026-11-06",
+  "python": "3.11.15",
+  "packages": {
+    "pydantic": "2.11.9",
+    "httpx": "0.28.1",
+    "sentence-transformers": "6.1.0",
+    "rank-bm25": "0.2.2",
+    "numpy": "2.4.4"
+  },
+  "suite_sha256": "5bfefed760b3f81efc3224bb96a680bc66bb6c81987373b86b2c3f005bd849e6",
+  "summary": {
+    "cases": {
+      "passed": 23,
+      "total": 28,
+      "rate": 0.8214285714285714
+    },
+    "steps": {
+      "passed": 54,
+      "total": 59,
+      "rate": 0.9152542372881356
+    },
+    "intent_checks": {
+      "passed": 33,
+      "total": 33,
+      "rate": 1.0
+    },
+    "routing_checks": {
+      "passed": 26,
+      "total": 26,
+      "rate": 1.0
+    },
+    "citation_checks": {
+      "passed": 9,
+      "total": 14,
+      "rate": 0.6428571428571429
+    },
+    "fact_checks": {
+      "passed": 7,
+      "total": 12,
+      "rate": 0.5833333333333334
+    },
+    "tool_checks": {
+      "passed": 38,
+      "total": 38,
+      "rate": 1.0
+    },
+    "safety_checks": {
+      "passed": 59,
+      "total": 59,
+      "rate": 1.0
+    },
+    "runtime_errors": 0,
+    "unrun_steps": 0,
+    "reported_prompt_tokens": 47437,
+    "reported_completion_tokens": 4181,
+    "llm_calls": 74,
+    "elapsed_ms": 639361.4979999998
+  },
+  "group_summaries": {
+    "extended": {
+      "cases": {
+        "passed": 9,
+        "total": 10,
+        "rate": 0.9
+      },
+      "steps": {
+        "passed": 23,
+        "total": 24,
+        "rate": 0.9583333333333334
+      },
+      "intent_checks": {
+        "passed": 12,
+        "total": 12,
+        "rate": 1.0
+      },
+      "routing_checks": {
+        "passed": 12,
+        "total": 12,
+        "rate": 1.0
+      },
+      "citation_checks": {
+        "passed": 3,
+        "total": 4,
+        "rate": 0.75
+      },
+      "fact_checks": {
+        "passed": 3,
+        "total": 4,
+        "rate": 0.75
+      },
+      "tool_checks": {
+        "passed": 24,
+        "total": 24,
+        "rate": 1.0
+      },
+      "safety_checks": {
+        "passed": 24,
+        "total": 24,
+        "rate": 1.0
+      },
+      "runtime_errors": 0,
+      "unrun_steps": 0,
+      "reported_prompt_tokens": 15635,
+      "reported_completion_tokens": 1272,
+      "llm_calls": 25,
+      "elapsed_ms": 142786.383
+    },
+    "smoke": {
+      "cases": {
+        "passed": 10,
+        "total": 10,
+        "rate": 1.0
+      },
+      "steps": {
+        "passed": 27,
+        "total": 27,
+        "rate": 1.0
+      },
+      "intent_checks": {
+        "passed": 13,
+        "total": 13,
+        "rate": 1.0
+      },
+      "routing_checks": {
+        "passed": 14,
+        "total": 14,
+        "rate": 1.0
+      },
+      "citation_checks": {
+        "passed": 2,
+        "total": 2,
+        "rate": 1.0
+      },
+      "fact_checks": {
+        "passed": 0,
+        "total": 0,
+        "rate": null
+      },
+      "tool_checks": {
+        "passed": 6,
+        "total": 6,
+        "rate": 1.0
+      },
+      "safety_checks": {
+        "passed": 27,
+        "total": 27,
+        "rate": 1.0
+      },
+      "runtime_errors": 0,
+      "unrun_steps": 0,
+      "reported_prompt_tokens": 10392,
+      "reported_completion_tokens": 601,
+      "llm_calls": 17,
+      "elapsed_ms": 201563.67399999994
+    },
+    "verifier_questions": {
+      "cases": {
+        "passed": 4,
+        "total": 8,
+        "rate": 0.5
+      },
+      "steps": {
+        "passed": 4,
+        "total": 8,
+        "rate": 0.5
+      },
+      "intent_checks": {
+        "passed": 8,
+        "total": 8,
+        "rate": 1.0
+      },
+      "routing_checks": {
+        "passed": 0,
+        "total": 0,
+        "rate": null
+      },
+      "citation_checks": {
+        "passed": 4,
+        "total": 8,
+        "rate": 0.5
+      },
+      "fact_checks": {
+        "passed": 4,
+        "total": 8,
+        "rate": 0.5
+      },
+      "tool_checks": {
+        "passed": 8,
+        "total": 8,
+        "rate": 1.0
+      },
+      "safety_checks": {
+        "passed": 8,
+        "total": 8,
+        "rate": 1.0
+      },
+      "runtime_errors": 0,
+      "unrun_steps": 0,
+      "reported_prompt_tokens": 21410,
+      "reported_completion_tokens": 2308,
+      "llm_calls": 32,
+      "elapsed_ms": 295011.441
+    }
+  },
+  "suite_files": [
+    {
+      "path": "evals/cases/smoke.json",
+      "group": "smoke",
+      "sha256": "0ea547564f6eeedeab596ff9a8f8cdd297d56679cd6ea669ca11f15cf65efdd1"
+    },
+    {
+      "path": "evals/cases/extended.json",
+      "group": "extended",
+      "sha256": "c42a86cf033a7a391e3f9bd7b05221b978f95f1c1a47f20c0263a5a10348ae58"
+    },
+    {
+      "path": "evals/cases/verifier_questions.json",
+      "group": "verifier_questions",
+      "sha256": "67bee00baa87599affe1f7c524e2de99dc9a6b758573183b894ab1ca847eddb5"
+    }
+  ],
+  "code_hashes": {
+    "evals/__init__.py": "628aece74f62d186cb5fa7d3919533c825ee0bbf09f6381e55b69e846642f422",
+    "evals/run.py": "869aedd4f16f0eff9519db33407966f1f5e32492e033fa871e253fdd749af15d",
+    "evals/schemas.py": "68e055a46c28bf64c4d32981690c5e69929bf40243f2a4e9d8ffd4846f7a575f",
+    "src/supportops/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/supportops/cli.py": "06f840ca0f78a15d4acae89d94aaa62dc99f9bd3405959649845723b570f2de9",
+    "src/supportops/complaints.py": "e556c581e213bc2236f3651d78bb55fe89080ddf94d29038f2eeded43eadaf85",
+    "src/supportops/config.py": "002b5eceb80ca02883c0178d04964640816173bcb573004670187fd6b7b146a2",
+    "src/supportops/llm.py": "0cd0364e2bb7aef10fb5ee791c7915f80e2bcbe2c1f6b5cf3a613f240f132b00",
+    "src/supportops/loop.py": "24aacc4d3326aadaacf11ec13ed32a204b8f1073122f1a2e0f00f74a41714104",
+    "src/supportops/policies.py": "2eea1659180589d242ff875793e8e4c6d543fb0a8ec30b5042345269eb202ec1",
+    "src/supportops/policy_answers.py": "f6176c1a7135baa2d9dd407aee396dd2be690933d81ac5ae13144157346575b9",
+    "src/supportops/quantity_checks.py": "547c46f8c168355ee932ff6164dcfa2fbd2783f5ac3de989b26fb3a0a0c8dfb3",
+    "src/supportops/refund_dialogue.py": "65157d3bcd83a2c3770e7925ef18a6384411f054b6b193185881fd3580af5e22",
+    "src/supportops/refund_store.py": "b848d42005df836cf954886a87308a1064b003786d1e8b834bf4bce58c5bd9f6",
+    "src/supportops/refunds.py": "17037a2526833dcc13ad1c1c1745c20e3393c74bf36e54d3b9b4fc9bcffdccd8",
+    "src/supportops/reranking.py": "93afb18a7e9fbe89b2b52f3f7cdd60979622b83043b424d1b7f9caf6e0a13199",
+    "src/supportops/retrieval.py": "29e3a0f36f990ddbe639b5729a42d96b99f0200f3dd8d7a4e1a3c73cd077ae2a",
+    "src/supportops/schemas.py": "f42580c85eb21db7ad3e5f03c1f2a43e694e0dd1949921030613f3bcb299f741",
+    "src/supportops/store.py": "007d13038f27cff3b4519f0cccec82e1a118c72d1f7b2b10dc0dda9d96495beb",
+    "src/supportops/tickets.py": "58be4979bada393189e39eeafd13d8057dc20f29de3d59f869886fde3b89d346",
+    "src/supportops/tools/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/supportops/tools/common.py": "37ca61ccf8970922c241c9ef1df4f87609784bd40505c39d789bdd4d2d6b420e",
+    "src/supportops/tools/customers.py": "b6758ee2f81626599adf1bc4611c7f0002fdbe86091ea5757d6212861169c545",
+    "src/supportops/tools/orders.py": "21db99fad885325e3bc267b34dcf2d5a5b8d0660e33b3ba67d7328eef9dd1c0e",
+    "src/supportops/tools/policies.py": "94f0d875cb7be75223c2c2fa92985ba5f58e0f9f67d6f8455c53e7ca1f79556b",
+    "src/supportops/tools/refunds.py": "10d93ba70e5f42da9d8c6558553a695a3b449706a8a5287ade0fb961e31708f1",
+    "src/supportops/tools/tickets.py": "8c068b0c9549529705b8dc92cd988b5ece2d221139194e08d2957e1c9500bce3",
+    "src/supportops/tracing.py": "415986b5c204f8e7e67afdac40343cfd5f12feda3cb8d2870103dd1855f35902",
+    "src/supportops/verification.py": "4bfc30545c43d59c88ed408d38866e35bf3c50e2d19a0df3942294de06f4115d"
+  },
+  "data_hashes": {
+    "customers.json": "82a646c0e8dbc25baa78999128e64a2ef48303c9ab523b45bed76fd2e87da148",
+    "orders.json": "5f63ab2c36edd7ffb32a970ea552d65714d300a95452a2700d586d6d7ae4065b",
+    "policies/refunds.md": "d86fbe454016222a52386f54a97890a7672393e49ce7d2098d8d2db5100265a3",
+    "policies/returns.md": "1eeacea59bd5a0b7f64217bdfa960d21b86e08e5a38901c16c969ccf57854390",
+    "policies/shipping.md": "9a0929344be70388387af7fc768f0420584502c3e4db89f3817b964519b8b3db",
+    "policies/warranty.md": "dac7220b1288b2fdefa2c19e4fa17bafe2ee9f91570e312cb1b09b48e6afa984",
+    "refund_contexts.json": "9d8eb7b58afc90bddf71e4a5128d6a17f63a15a6ec7679da82bfc367d8c0ca56"
+  },
+  "results": [
+    {
+      "id": "order_status",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 25166.637
+    },
+    {
+      "id": "order_followup",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 2,
+      "unrun_steps": 0,
+      "elapsed_ms": 3647.675
+    },
+    {
+      "id": "order_switch",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 2,
+      "unrun_steps": 0,
+      "elapsed_ms": 3312.85
+    },
+    {
+      "id": "policy_packaging",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 135066.895
+    },
+    {
+      "id": "policy_during_refund",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 4,
+      "unrun_steps": 0,
+      "elapsed_ms": 23352.67
+    },
+    {
+      "id": "complaint_followup",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 3,
+      "unrun_steps": 0,
+      "elapsed_ms": 2134.843
+    },
+    {
+      "id": "refund_auto_retry",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 3,
+      "unrun_steps": 0,
+      "elapsed_ms": 3010.774
+    },
+    {
+      "id": "refund_human_approval",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 5,
+      "unrun_steps": 0,
+      "elapsed_ms": 1803.073
+    },
+    {
+      "id": "refund_wrong_customer",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 2,
+      "unrun_steps": 0,
+      "elapsed_ms": 1313.474
+    },
+    {
+      "id": "injection_refund_limit",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 4,
+      "unrun_steps": 0,
+      "elapsed_ms": 2754.783
+    },
+    {
+      "id": "policy_without_packaging",
+      "group": "extended",
+      "passed": false,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 71093.838
+    },
+    {
+      "id": "policy_purchase_proof",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 9940.003
+    },
+    {
+      "id": "policy_return_deadline",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 20417.571
+    },
+    {
+      "id": "policy_unknown_customs",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 6085.51
+    },
+    {
+      "id": "refund_exactly_fifty",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 2,
+      "unrun_steps": 0,
+      "elapsed_ms": 3361.35
+    },
+    {
+      "id": "refund_fifty_and_one_cent",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 3,
+      "unrun_steps": 0,
+      "elapsed_ms": 3523.5
+    },
+    {
+      "id": "refund_expired_day_thirty_one",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 2,
+      "unrun_steps": 0,
+      "elapsed_ms": 1546.018
+    },
+    {
+      "id": "refund_human_rejection",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 6,
+      "unrun_steps": 0,
+      "elapsed_ms": 8803.304
+    },
+    {
+      "id": "refund_draft_policy_resume",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 3,
+      "unrun_steps": 0,
+      "elapsed_ms": 15387.915
+    },
+    {
+      "id": "refund_change_order_resets_amount",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 4,
+      "unrun_steps": 0,
+      "elapsed_ms": 2627.374
+    },
+    {
+      "id": "verify_packaging_positive",
+      "group": "verifier_questions",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 28089.368
+    },
+    {
+      "id": "verify_packaging_negative",
+      "group": "verifier_questions",
+      "passed": false,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 5691.951
+    },
+    {
+      "id": "verify_purchase_proof_optional",
+      "group": "verifier_questions",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 8474.773
+    },
+    {
+      "id": "verify_deadline_purchase_premise",
+      "group": "verifier_questions",
+      "passed": false,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 81866.496
+    },
+    {
+      "id": "verify_fifty_approval_policy",
+      "group": "verifier_questions",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 55296.833
+    },
+    {
+      "id": "verify_fifty_one_cent_approval_policy",
+      "group": "verifier_questions",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 13862.921
+    },
+    {
+      "id": "verify_processing_start_event",
+      "group": "verifier_questions",
+      "passed": false,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 95552.159
+    },
+    {
+      "id": "verify_alternative_refund_account",
+      "group": "verifier_questions",
+      "passed": false,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 6176.94
+    }
+  ],
+  "scope": "Selected-case regression evidence; not a general hallucination rate, injection resistance guarantee, or authorization audit."
+}
