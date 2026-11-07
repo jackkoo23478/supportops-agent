@@ -2,10 +2,12 @@
 
 from supportops.store import Store
 from supportops.tools.common import error, ok
+from supportops.budget import budgeted_tool
 from supportops.tracing import traced
 
 
 @traced("tool.get_order", inputs=("order_id",))
+@budgeted_tool
 def get_order(store: Store, order_id: str) -> dict:
     """Look up one order by its id (for example O1001)."""
     order = store.get_order(order_id.strip().upper())

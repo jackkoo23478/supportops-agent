@@ -3,6 +3,9 @@
 import json
 import re
 
+from supportops.budget import (
+    BudgetExceeded, BudgetLimits, MessageBudget, limit_reply, message_budget,
+)
 from supportops.complaints import ComplaintService
 from supportops.llm import OllamaClient
 from supportops.policy_answers import PolicyAnswerService
@@ -118,6 +121,7 @@ def run_message(
     refunds: RefundService | None = None,
     tracer: JsonlTracer | None = None,
     session_id: str | None = None,
+    budget_limits: BudgetLimits | None = None,
 ) -> str:
     """Handle a message, optionally recording a trace and state snapshots."""
     state = state if state is not None else ConversationState()
@@ -125,12 +129,23 @@ def run_message(
         llm=llm, store=store, state=state, policy_answers=policy_answers,
         complaints=complaints, refunds=refunds,
     )
+    configured = getattr(llm, "budget_limits", None)
+    limits = budget_limits or (configured if isinstance(configured, BudgetLimits) else BudgetLimits())
+
+    def execute():
+        budget = MessageBudget(limits)
+        with message_budget(budget):
+            try:
+                return _run_message(message, **arguments)
+            except BudgetExceeded:
+                return limit_reply(budget)
+
     if tracer is None:
-        return _run_message(message, **arguments)
+        return execute()
     with tracer.trace("message", inputs={
         "message": message, "state_before": state.model_dump(mode="json"),
     }, session_id=session_id) as active:
-        reply = _run_message(message, **arguments)
+        reply = execute()
         active.output = {"reply": reply, "state_after": state.model_dump(mode="json")}
         return reply
 

@@ -6,6 +6,9 @@ from typing import TypeVar
 import httpx
 from pydantic import BaseModel, ValidationError
 
+from supportops.budget import (
+    BudgetLimits, current_budget, output_limit, requested_output_limit,
+)
 from supportops.config import Settings
 from supportops.tracing import span, traced
 
@@ -31,20 +34,27 @@ class OllamaClient:
         model: str,
         timeout: float = 120,
         transport: httpx.BaseTransport | None = None,
+        budget_limits: BudgetLimits | None = None,
     ) -> None:
+        self.budget_limits = budget_limits or BudgetLimits()
         self.model = model
         self._http = httpx.Client(base_url=base_url, timeout=timeout, transport=transport)
 
     @traced("llm.chat", inputs=("messages", "schema"))
     def chat(self, messages: list[dict], *, schema: dict | None = None) -> ChatResult:
+        budget = current_budget()
+        limits = budget.limits if budget is not None else self.budget_limits
         body = {
             "model": self.model,
             "messages": messages,
             "stream": False,
-            "options": {"temperature": 0},
+            "options": {"temperature": 0, "num_predict": requested_output_limit(
+                limits.answer_max_output_tokens)},
         }
         if schema is not None:
             body["format"] = schema
+        if budget is not None:
+            budget.consume("llm")
         try:
             response = self._http.post("/api/chat", json=body)
             response.raise_for_status()
@@ -54,6 +64,8 @@ class OllamaClient:
             raise LLMError(f"Ollama request failed: {e}") from e
 
         data = response.json()
+        if budget is not None:
+            budget.record_tokens(data.get("prompt_eval_count", 0), data.get("eval_count", 0))
         return ChatResult(
             content=data["message"]["content"],
             prompt_tokens=data.get("prompt_eval_count", 0),
@@ -68,7 +80,11 @@ class OllamaClient:
         schema = output.model_json_schema()
         last_error: ValidationError | None = None
         for attempt in range(max_retries + 1):
-            result = self.chat(messages, schema=schema)
+            with output_limit(
+                output.__name__,
+                current_budget().limits if current_budget() is not None else self.budget_limits,
+            ):
+                result = self.chat(messages, schema=schema)
             try:
                 return output.model_validate_json(result.content)
             except ValidationError as e:
@@ -93,6 +109,7 @@ class OllamaClient:
 def make_llm(settings: Settings) -> OllamaClient:
     if settings.llm_provider == "ollama":
         return OllamaClient(
-            settings.ollama_base_url, settings.llm_model, settings.llm_timeout_seconds
+            settings.ollama_base_url, settings.llm_model, settings.llm_timeout_seconds,
+            budget_limits=settings.budget_limits
         )
     raise LLMError(f"Unsupported LLM_PROVIDER: {settings.llm_provider}")

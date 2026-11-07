@@ -5,6 +5,8 @@ from dataclasses import dataclass
 
 from dotenv import load_dotenv
 
+from supportops.budget import BudgetLimits
+
 
 @dataclass(frozen=True)
 class Settings:
@@ -15,6 +17,7 @@ class Settings:
     anthropic_api_key: str | None
     max_steps: int
     refund_auto_approve_limit: float
+    budget_limits: BudgetLimits = BudgetLimits()
 
 
 def load_settings() -> Settings:
@@ -25,6 +28,10 @@ def load_settings() -> Settings:
         ollama_base_url=os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434"),
         llm_timeout_seconds=float(os.environ.get("LLM_TIMEOUT_SECONDS", "120")),
         anthropic_api_key=os.environ.get("ANTHROPIC_API_KEY") or None,
-        max_steps=int(os.environ.get("MAX_STEPS", "8")),
+        max_steps=8,  # Deprecated compatibility field; use separate call limits.
+        budget_limits=BudgetLimits(**{
+            key: int(os.environ.get(key.upper(), str(value)))
+            for key, value in vars(BudgetLimits()).items()
+        }),
         refund_auto_approve_limit=float(os.environ.get("REFUND_AUTO_APPROVE_LIMIT", "50")),
     )

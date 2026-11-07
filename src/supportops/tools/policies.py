@@ -2,10 +2,12 @@
 
 from supportops.retrieval import HybridPolicySearcher, tokenize
 from supportops.tools.common import error, ok
+from supportops.budget import budgeted_tool
 from supportops.tracing import traced
 
 
 @traced("tool.search_policy", inputs=("query", "top_k", "candidate_k", "min_semantic_score"))
+@budgeted_tool
 def search_policy(
     searcher: HybridPolicySearcher,
     query: str,

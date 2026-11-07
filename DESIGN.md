@@ -80,6 +80,21 @@ are not treated as independent evaluation truth. See [evaluation details](docs/E
 ## Current boundaries
 
 This snapshot has no real customer/admin authentication, durable draft sessions,
-global tool/token budget, or real payment integration. Read-only order lookup is
+hard aggregate token/deadline budget, or real payment integration. Read-only order lookup is
 not yet ownership-scoped. The environment refund limit is not wired into the
 hard-coded USD 50 rule. These remain explicit backlog items, not completed safeguards.
+
+## Per-message execution budgets
+
+A ContextVar binds a fresh MessageBudget to each run_message call and resets it in
+a finally block. LLM requests consume an allowance immediately before HTTP dispatch;
+public tool entry points consume before validation or mutation. JSON retries share
+the allowance. Calls outside run_message need an explicit message_budget scope for
+call enforcement. Per-call output caps still apply to standalone Ollama calls.
+
+BudgetExceeded propagates through policy verification and service handlers to the
+message boundary. The boundary reports successful writes recorded by the tool
+wrapper and does not repeat them. Saved refund IDs and locked unsubmitted drafts
+retain their existing retry behavior. Token totals are provider-reported usage and
+warn once after crossing the advisory threshold; they cannot enforce an exact total
+preflight limit. Counters are independent of optional JSONL tracing.

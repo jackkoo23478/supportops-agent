@@ -24,11 +24,13 @@ refunds never transfer real money, and customer/admin identities are not authent
 - **Tracing and evaluation:** local JSONL traces and 28 isolated evaluation
   conversations with expected intents, tools, state, references, and database outcomes.
 
-Latest validation: **362 pytest tests passed**. The latest real `qwen2.5:7b` Eval
-passed **23/28 conversations**, including 10/10 original cases, 9/10 expanded cases,
-and 4/8 focused policy questions. These are small, curated suites, not a production
-accuracy claim. See [evaluation results](docs/EVALUATION.md) and
-[current project status](docs/PROJECT_STATUS.md).
+Latest validation passed **390 pytest tests** and **24/28 conversations** with
+`qwen2.5:7b`. The smoke suite passed 10/10, the extended suite 9/10, and the
+focused policy suite 5/8. See [evaluation results](docs/EVALUATION.md) for the
+model and verification comparisons and the remaining failed cases.
+
+Follow the [recording walkthrough](docs/DEMO.md) to demonstrate order follow-ups,
+cited policy answers, complaint tickets, and an approval-gated simulated refund.
 
 ## Quick start
 
@@ -195,11 +197,26 @@ patterns cover selected facts, not a complete hallucination or injection metric.
 `.env.example` documents the available settings. Ollama is the only implemented
 provider. Structured-output retries and policy rewrite limits are enforced.
 
+Each `run_message()` starts a fresh budget shared by classification, policy generation,
+verification, retries, and tools. Defaults are 10 actual LLM requests and 5 public tool
+invocations. Every attempt counts, including failed requests. The next operation is
+blocked before execution when its call limit is exhausted; saved action IDs remain
+available and completed writes are not replayed.
+
+Ollama generation caps are 256 tokens for classification, 768 for answers, and 1,536
+for verifier output. `MAX_TOTAL_TOKENS=20000` is an advisory threshold for reported
+input plus output tokens: it logs one warning per message, not a hard total cap.
+Missing provider usage cannot be counted. `budget.message` trace spans record limits,
+usage, warnings, and blocking reasons. Without tracing, enforcement still applies.
+Tool counts cover public tool entry points, not internal SQLite/store operations.
+Standalone tool scripts do not establish a message budget. `MAX_STEPS` is deprecated
+and ignored; configure the separate limits in `.env.example`.
+
 The following remain unfinished and are recorded in the project backlog:
 
 - Read-only order lookup does not yet enforce customer ownership. Write paths
   check ownership, but this is not an authenticated multi-user application.
-- `MAX_STEPS` is parsed but not enforced; no overall tool/token budget exists.
+- Total token usage is advisory; there is no hard aggregate token or wall-clock budget.
 - `REFUND_AUTO_APPROVE_LIMIT` is parsed but does not override the current hard-coded
   USD 50 approval rule. Changing the environment value alone has no effect.
 - Draft state is not durable; use saved refund IDs after restarting.
