@@ -29,8 +29,9 @@ Latest validation passed **390 pytest tests** and **24/28 conversations** with
 focused policy suite 5/8. See [evaluation results](docs/EVALUATION.md) for the
 model and verification comparisons and the remaining failed cases.
 
-Follow the [recording walkthrough](docs/DEMO.md) to demonstrate order follow-ups,
-cited policy answers, complaint tickets, and an approval-gated simulated refund.
+Watch the [65-second SupportOps demo](docs/media/supportops-demo.mp4) for order
+follow-ups, cited policy answers, complaint tickets, and an approval-gated
+simulated refund. Reproduce the demo with the [walkthrough](docs/DEMO.md).
 
 ## Quick start
 
