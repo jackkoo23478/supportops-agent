@@ -8,7 +8,7 @@ import re
 import sqlite3
 import sys
 from contextlib import closing
-from dataclasses import replace
+from dataclasses import asdict, replace
 from datetime import datetime, timezone
 from decimal import Decimal
 from importlib.metadata import PackageNotFoundError, version
@@ -341,6 +341,7 @@ def main(argv: list[str] | None = None) -> int:
     report = {
         "schema_version": 1, "run_id": run_id, "status": "running",
         "model": settings.llm_model, "provider": settings.llm_provider,
+        "budget_limits": asdict(settings.budget_limits),
         "requested_on": suite.requested_on.isoformat(), "timeout_seconds": args.timeout,
         "python": platform.python_version(), "packages": packages,
         "suite_file": manifest[0]["path"] if len(manifest) == 1 else None,

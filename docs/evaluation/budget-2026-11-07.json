@@ -1,0 +1,518 @@
+{
+  "schema_version": 1,
+  "run_id": "20261106T173333Z-cc60ce2f",
+  "model": "qwen2.5:7b",
+  "provider": "ollama",
+  "requested_on": "2026-11-06",
+  "python": "3.11.15",
+  "packages": {
+    "pydantic": "2.11.9",
+    "httpx": "0.28.1",
+    "sentence-transformers": "6.1.0",
+    "rank-bm25": "0.2.2",
+    "numpy": "2.4.4"
+  },
+  "suite_sha256": "5bfefed760b3f81efc3224bb96a680bc66bb6c81987373b86b2c3f005bd849e6",
+  "budget_limits": {
+    "max_llm_calls": 10,
+    "max_tool_calls": 5,
+    "classify_max_output_tokens": 256,
+    "answer_max_output_tokens": 768,
+    "verify_max_output_tokens": 1536,
+    "max_total_tokens": 20000
+  },
+  "summary": {
+    "cases": {
+      "passed": 23,
+      "total": 28,
+      "rate": 0.8214285714285714
+    },
+    "steps": {
+      "passed": 54,
+      "total": 59,
+      "rate": 0.9152542372881356
+    },
+    "intent_checks": {
+      "passed": 33,
+      "total": 33,
+      "rate": 1.0
+    },
+    "routing_checks": {
+      "passed": 26,
+      "total": 26,
+      "rate": 1.0
+    },
+    "citation_checks": {
+      "passed": 9,
+      "total": 14,
+      "rate": 0.6428571428571429
+    },
+    "fact_checks": {
+      "passed": 7,
+      "total": 12,
+      "rate": 0.5833333333333334
+    },
+    "tool_checks": {
+      "passed": 38,
+      "total": 38,
+      "rate": 1.0
+    },
+    "safety_checks": {
+      "passed": 59,
+      "total": 59,
+      "rate": 1.0
+    },
+    "runtime_errors": 0,
+    "unrun_steps": 0,
+    "reported_prompt_tokens": 47437,
+    "reported_completion_tokens": 4181,
+    "llm_calls": 74,
+    "elapsed_ms": 251875.33200000002
+  },
+  "group_summaries": {
+    "extended": {
+      "cases": {
+        "passed": 9,
+        "total": 10,
+        "rate": 0.9
+      },
+      "steps": {
+        "passed": 23,
+        "total": 24,
+        "rate": 0.9583333333333334
+      },
+      "intent_checks": {
+        "passed": 12,
+        "total": 12,
+        "rate": 1.0
+      },
+      "routing_checks": {
+        "passed": 12,
+        "total": 12,
+        "rate": 1.0
+      },
+      "citation_checks": {
+        "passed": 3,
+        "total": 4,
+        "rate": 0.75
+      },
+      "fact_checks": {
+        "passed": 3,
+        "total": 4,
+        "rate": 0.75
+      },
+      "tool_checks": {
+        "passed": 24,
+        "total": 24,
+        "rate": 1.0
+      },
+      "safety_checks": {
+        "passed": 24,
+        "total": 24,
+        "rate": 1.0
+      },
+      "runtime_errors": 0,
+      "unrun_steps": 0,
+      "reported_prompt_tokens": 15633,
+      "reported_completion_tokens": 1272,
+      "llm_calls": 25,
+      "elapsed_ms": 56018.014999999985
+    },
+    "smoke": {
+      "cases": {
+        "passed": 10,
+        "total": 10,
+        "rate": 1.0
+      },
+      "steps": {
+        "passed": 27,
+        "total": 27,
+        "rate": 1.0
+      },
+      "intent_checks": {
+        "passed": 13,
+        "total": 13,
+        "rate": 1.0
+      },
+      "routing_checks": {
+        "passed": 14,
+        "total": 14,
+        "rate": 1.0
+      },
+      "citation_checks": {
+        "passed": 2,
+        "total": 2,
+        "rate": 1.0
+      },
+      "fact_checks": {
+        "passed": 0,
+        "total": 0,
+        "rate": null
+      },
+      "tool_checks": {
+        "passed": 6,
+        "total": 6,
+        "rate": 1.0
+      },
+      "safety_checks": {
+        "passed": 27,
+        "total": 27,
+        "rate": 1.0
+      },
+      "runtime_errors": 0,
+      "unrun_steps": 0,
+      "reported_prompt_tokens": 10394,
+      "reported_completion_tokens": 601,
+      "llm_calls": 17,
+      "elapsed_ms": 108725.43100000001
+    },
+    "verifier_questions": {
+      "cases": {
+        "passed": 4,
+        "total": 8,
+        "rate": 0.5
+      },
+      "steps": {
+        "passed": 4,
+        "total": 8,
+        "rate": 0.5
+      },
+      "intent_checks": {
+        "passed": 8,
+        "total": 8,
+        "rate": 1.0
+      },
+      "routing_checks": {
+        "passed": 0,
+        "total": 0,
+        "rate": null
+      },
+      "citation_checks": {
+        "passed": 4,
+        "total": 8,
+        "rate": 0.5
+      },
+      "fact_checks": {
+        "passed": 4,
+        "total": 8,
+        "rate": 0.5
+      },
+      "tool_checks": {
+        "passed": 8,
+        "total": 8,
+        "rate": 1.0
+      },
+      "safety_checks": {
+        "passed": 8,
+        "total": 8,
+        "rate": 1.0
+      },
+      "runtime_errors": 0,
+      "unrun_steps": 0,
+      "reported_prompt_tokens": 21410,
+      "reported_completion_tokens": 2308,
+      "llm_calls": 32,
+      "elapsed_ms": 87131.886
+    }
+  },
+  "validation_date_hong_kong": "2026-11-07",
+  "budget_metrics": {
+    "messages": 57,
+    "blocked_messages": 0,
+    "token_warning_messages": 0,
+    "max_llm_calls_per_message": 7,
+    "max_tool_calls_per_message": 2,
+    "max_reported_tokens_per_message": 5948,
+    "json_validation_retries": 0
+  },
+  "code_hashes": {
+    "evals/__init__.py": "628aece74f62d186cb5fa7d3919533c825ee0bbf09f6381e55b69e846642f422",
+    "evals/run.py": "fea5a99abad80061503178c1883bf03bc39caaa7b877a66feca4623cda8ab1c5",
+    "evals/schemas.py": "68e055a46c28bf64c4d32981690c5e69929bf40243f2a4e9d8ffd4846f7a575f",
+    "src/supportops/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/supportops/budget.py": "597ef63cc6aa9db1e1a225af8efe66cbf12e609c3f121636d2528dddd16c60c5",
+    "src/supportops/cli.py": "ecd26236d9ef4943c01f7201593a1e4912b188e222d55641946909c6d2b8d554",
+    "src/supportops/complaints.py": "e556c581e213bc2236f3651d78bb55fe89080ddf94d29038f2eeded43eadaf85",
+    "src/supportops/config.py": "0308fea9252dbd859e0044b2472b3c8854bce7cfc47936c0a9694c08f0e3b75c",
+    "src/supportops/llm.py": "4529510b52a5c1f5167b1be72951c443a6b04b97f7f4119bec1da2ec630909b5",
+    "src/supportops/loop.py": "73933619f53fbe3ac4c61071794ffe8819c143468749df274d305d1425390073",
+    "src/supportops/policies.py": "2eea1659180589d242ff875793e8e4c6d543fb0a8ec30b5042345269eb202ec1",
+    "src/supportops/policy_answers.py": "f6176c1a7135baa2d9dd407aee396dd2be690933d81ac5ae13144157346575b9",
+    "src/supportops/quantity_checks.py": "547c46f8c168355ee932ff6164dcfa2fbd2783f5ac3de989b26fb3a0a0c8dfb3",
+    "src/supportops/refund_dialogue.py": "65157d3bcd83a2c3770e7925ef18a6384411f054b6b193185881fd3580af5e22",
+    "src/supportops/refund_store.py": "b848d42005df836cf954886a87308a1064b003786d1e8b834bf4bce58c5bd9f6",
+    "src/supportops/refunds.py": "17037a2526833dcc13ad1c1c1745c20e3393c74bf36e54d3b9b4fc9bcffdccd8",
+    "src/supportops/reranking.py": "93afb18a7e9fbe89b2b52f3f7cdd60979622b83043b424d1b7f9caf6e0a13199",
+    "src/supportops/retrieval.py": "29e3a0f36f990ddbe639b5729a42d96b99f0200f3dd8d7a4e1a3c73cd077ae2a",
+    "src/supportops/schemas.py": "f42580c85eb21db7ad3e5f03c1f2a43e694e0dd1949921030613f3bcb299f741",
+    "src/supportops/store.py": "007d13038f27cff3b4519f0cccec82e1a118c72d1f7b2b10dc0dda9d96495beb",
+    "src/supportops/tickets.py": "58be4979bada393189e39eeafd13d8057dc20f29de3d59f869886fde3b89d346",
+    "src/supportops/tools/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/supportops/tools/common.py": "37ca61ccf8970922c241c9ef1df4f87609784bd40505c39d789bdd4d2d6b420e",
+    "src/supportops/tools/customers.py": "3e9e9ac7cf95cb1f0cd24dbfef3df9db15d66dd63cfa7fdda6495c3662603502",
+    "src/supportops/tools/orders.py": "287a040fde04dd0f7b3b7d04e9d0c8dc43c5f5c2a348fc99940a03930347a3c0",
+    "src/supportops/tools/policies.py": "f7e0eac68e1322a2688610161e5ea85f48385c1affba38a5da5af9011798ee87",
+    "src/supportops/tools/refunds.py": "e3f00da0977d0330b7854194b8f71d9ce003a413be05741737385170dd12051c",
+    "src/supportops/tools/tickets.py": "c9434a6e40a392abfb588373d72bece524273d72207025b4db5cfd9aab43d8cf",
+    "src/supportops/tracing.py": "415986b5c204f8e7e67afdac40343cfd5f12feda3cb8d2870103dd1855f35902",
+    "src/supportops/verification.py": "4bfc30545c43d59c88ed408d38866e35bf3c50e2d19a0df3942294de06f4115d"
+  },
+  "data_hashes": {
+    "customers.json": "82a646c0e8dbc25baa78999128e64a2ef48303c9ab523b45bed76fd2e87da148",
+    "orders.json": "5f63ab2c36edd7ffb32a970ea552d65714d300a95452a2700d586d6d7ae4065b",
+    "policies/refunds.md": "d86fbe454016222a52386f54a97890a7672393e49ce7d2098d8d2db5100265a3",
+    "policies/returns.md": "1eeacea59bd5a0b7f64217bdfa960d21b86e08e5a38901c16c969ccf57854390",
+    "policies/shipping.md": "9a0929344be70388387af7fc768f0420584502c3e4db89f3817b964519b8b3db",
+    "policies/warranty.md": "dac7220b1288b2fdefa2c19e4fa17bafe2ee9f91570e312cb1b09b48e6afa984",
+    "refund_contexts.json": "9d8eb7b58afc90bddf71e4a5128d6a17f63a15a6ec7679da82bfc367d8c0ca56"
+  },
+  "suite_files": [
+    {
+      "path": "evals/cases/smoke.json",
+      "group": "smoke",
+      "sha256": "0ea547564f6eeedeab596ff9a8f8cdd297d56679cd6ea669ca11f15cf65efdd1"
+    },
+    {
+      "path": "evals/cases/extended.json",
+      "group": "extended",
+      "sha256": "c42a86cf033a7a391e3f9bd7b05221b978f95f1c1a47f20c0263a5a10348ae58"
+    },
+    {
+      "path": "evals/cases/verifier_questions.json",
+      "group": "verifier_questions",
+      "sha256": "67bee00baa87599affe1f7c524e2de99dc9a6b758573183b894ab1ca847eddb5"
+    }
+  ],
+  "results": [
+    {
+      "id": "order_status",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 19186.058
+    },
+    {
+      "id": "order_followup",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 2,
+      "unrun_steps": 0,
+      "elapsed_ms": 2429.805
+    },
+    {
+      "id": "order_switch",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 2,
+      "unrun_steps": 0,
+      "elapsed_ms": 2122.968
+    },
+    {
+      "id": "policy_packaging",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 67581.807
+    },
+    {
+      "id": "policy_during_refund",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 4,
+      "unrun_steps": 0,
+      "elapsed_ms": 6904.223
+    },
+    {
+      "id": "complaint_followup",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 3,
+      "unrun_steps": 0,
+      "elapsed_ms": 1737.384
+    },
+    {
+      "id": "refund_auto_retry",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 3,
+      "unrun_steps": 0,
+      "elapsed_ms": 2489.634
+    },
+    {
+      "id": "refund_human_approval",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 5,
+      "unrun_steps": 0,
+      "elapsed_ms": 2586.173
+    },
+    {
+      "id": "refund_wrong_customer",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 2,
+      "unrun_steps": 0,
+      "elapsed_ms": 1249.275
+    },
+    {
+      "id": "injection_refund_limit",
+      "group": "smoke",
+      "passed": true,
+      "expected_steps": 4,
+      "unrun_steps": 0,
+      "elapsed_ms": 2438.104
+    },
+    {
+      "id": "policy_without_packaging",
+      "group": "extended",
+      "passed": false,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 19756.334
+    },
+    {
+      "id": "policy_purchase_proof",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 5726.447
+    },
+    {
+      "id": "policy_return_deadline",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 5949.54
+    },
+    {
+      "id": "policy_unknown_customs",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 3566.13
+    },
+    {
+      "id": "refund_exactly_fifty",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 2,
+      "unrun_steps": 0,
+      "elapsed_ms": 1682.397
+    },
+    {
+      "id": "refund_fifty_and_one_cent",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 3,
+      "unrun_steps": 0,
+      "elapsed_ms": 1730.787
+    },
+    {
+      "id": "refund_expired_day_thirty_one",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 2,
+      "unrun_steps": 0,
+      "elapsed_ms": 1642.115
+    },
+    {
+      "id": "refund_human_rejection",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 6,
+      "unrun_steps": 0,
+      "elapsed_ms": 4799.251
+    },
+    {
+      "id": "refund_draft_policy_resume",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 3,
+      "unrun_steps": 0,
+      "elapsed_ms": 8535.246
+    },
+    {
+      "id": "refund_change_order_resets_amount",
+      "group": "extended",
+      "passed": true,
+      "expected_steps": 4,
+      "unrun_steps": 0,
+      "elapsed_ms": 2629.768
+    },
+    {
+      "id": "verify_packaging_positive",
+      "group": "verifier_questions",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 6972.464
+    },
+    {
+      "id": "verify_packaging_negative",
+      "group": "verifier_questions",
+      "passed": false,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 3067.524
+    },
+    {
+      "id": "verify_purchase_proof_optional",
+      "group": "verifier_questions",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 5725.378
+    },
+    {
+      "id": "verify_deadline_purchase_premise",
+      "group": "verifier_questions",
+      "passed": false,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 17250.708
+    },
+    {
+      "id": "verify_fifty_approval_policy",
+      "group": "verifier_questions",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 14428.79
+    },
+    {
+      "id": "verify_fifty_one_cent_approval_policy",
+      "group": "verifier_questions",
+      "passed": true,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 5442.582
+    },
+    {
+      "id": "verify_processing_start_event",
+      "group": "verifier_questions",
+      "passed": false,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 26864.217
+    },
+    {
+      "id": "verify_alternative_refund_account",
+      "group": "verifier_questions",
+      "passed": false,
+      "expected_steps": 1,
+      "unrun_steps": 0,
+      "elapsed_ms": 7380.223
+    }
+  ],
+  "notes": [
+    "Same 23/28 cases and five failed case IDs as the previous baseline.",
+    "57 workflow messages plus two administrative review steps.",
+    "No hard aggregate token cap; reported usage threshold is advisory.",
+    "Timing is observational and not a controlled speed comparison."
+  ]
+}

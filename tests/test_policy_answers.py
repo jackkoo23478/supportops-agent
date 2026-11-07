@@ -71,6 +71,88 @@ def test_no_search_results_skip_answer_generation(searcher, llm):
     llm.chat_json.assert_not_called()
 
 
+@pytest.mark.parametrize("days", [30, 45])
+def test_return_window_start_uses_retrieved_calendar_duration(searcher, llm, days):
+    searcher.search.return_value[0]["content"] = (
+        "Unused items in their original packaging may be returned within\n"
+        f"{days} calendar days of delivery. Proof of purchase is required."
+    )
+
+    answer = PolicyAnswerService(searcher).answer(
+        "Does the 30-day return window start from the purchase date?", llm,
+    )
+
+    assert answer == (
+        f"The return window is {days} calendar days from delivery.\n"
+        "Source: returns.eligibility (returns.md)"
+    )
+    llm.chat_json.assert_not_called()
+
+
+@pytest.mark.parametrize(("question", "duration"), [
+    ("When does the return window start?", "30 business days of delivery"),
+    ("When does the return window start?", "30 calendar days of purchase"),
+    ("When does the return window start and can I return a used item?", "30 calendar days of delivery"),
+])
+def test_return_window_shortcut_requires_focused_question_and_supported_rule(
+    searcher, llm, question, duration,
+):
+    searcher.search.return_value[0]["content"] = (
+        "Unused items in their original packaging may be returned within "
+        f"{duration}. Proof of purchase is required."
+    )
+    verifier = Mock()
+    verifier.verify.return_value = PolicyVerification(supported=False, issues=["Rejected draft"])
+
+    answer = PolicyAnswerService(searcher, verifier=verifier, max_attempts=1).answer(question, llm)
+
+    assert answer == NO_POLICY_EVIDENCE
+    verifier.verify.assert_called_once()
+
+
+def test_refund_processing_start_uses_retrieved_inspection_rule(searcher, llm):
+    searcher.search.return_value[0].update(
+        source_id="refunds.processing", document="refunds.md",
+        content=("For an approved return, the refund is issued to the original payment\n"
+                 "method after the returned item has been received and inspected.\n"
+                 "Refund processing takes 6 to 12 business days after inspection."),
+    )
+
+    answer = PolicyAnswerService(searcher).answer(
+        "Does refund processing start when I submit the request?", llm,
+    )
+
+    assert answer == (
+        "For an approved return, refund processing starts after the returned item "
+        "has been received and inspected. Processing takes 6 to 12 business days "
+        "after inspection.\nSource: refunds.processing (refunds.md)"
+    )
+    llm.chat_json.assert_not_called()
+
+
+@pytest.mark.parametrize("duration", [
+    "5 to 10 business days after approval",
+    "5 to 10 calendar days after inspection",
+    "10 to 5 business days after inspection",
+])
+def test_refund_processing_shortcut_requires_matching_inspection_evidence(searcher, llm, duration):
+    searcher.search.return_value[0].update(
+        source_id="refunds.processing", document="refunds.md",
+        content=("For an approved return, the refund is issued to the original payment method "
+                 "after the returned item has been received and inspected. "
+                 f"Refund processing takes {duration}."),
+    )
+    verifier = Mock()
+    verifier.verify.return_value = PolicyVerification(supported=False, issues=["Rejected draft"])
+
+    answer = PolicyAnswerService(searcher, verifier=verifier, max_attempts=1).answer(
+        "When does refund processing start?", llm,
+    )
+
+    assert answer == NO_POLICY_EVIDENCE
+    verifier.verify.assert_called_once()
+
+
 def test_blank_question_skips_search_and_generation(searcher, llm):
     assert PolicyAnswerService(searcher).answer("  ", llm) == NO_POLICY_EVIDENCE
     searcher.search.assert_not_called()

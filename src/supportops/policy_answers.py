@@ -1,6 +1,7 @@
 """Generate policy replies from retrieved evidence with checked source IDs."""
 
 import json
+import re
 from typing import TYPE_CHECKING
 
 from supportops.llm import LLMError, OllamaClient
@@ -13,6 +14,64 @@ if TYPE_CHECKING:
 
 
 NO_POLICY_EVIDENCE = "I do not have enough policy information to answer that question."
+
+_RETURN_WINDOW = r"the (?:[0-9]+[ -]day )?return (?:window|period)"
+_RETURN_WINDOW_QUESTION = re.compile(
+    rf"(?:when does {_RETURN_WINDOW} start|does {_RETURN_WINDOW} start "
+    r"(?:from|on|at) (?:the )?(?:purchase|delivery)(?: date)?)\??",
+    re.IGNORECASE,
+)
+_RETURN_WINDOW_POLICY = re.compile(
+    r"Unused items in their original packaging may be returned within "
+    r"(?P<days>[1-9][0-9]*) calendar days of delivery\. Proof of purchase is required\."
+)
+_REFUND_PROCESSING_QUESTION = re.compile(
+    r"(?:when does refund processing (?:start|begin)|does refund processing (?:start|begin) "
+    r"(?:when i submit the (?:refund )?request|after (?:the )?approval|"
+    r"when (?:the|my) (?:refund )?request is approved))\??",
+    re.IGNORECASE,
+)
+_REFUND_PROCESSING_POLICY = re.compile(
+    r"For an approved return, the refund is issued to the original payment method "
+    r"after the returned item has been received and inspected\. "
+    r"Refund processing takes (?P<minimum>[1-9][0-9]*) to (?P<maximum>[1-9][0-9]*) "
+    r"business days after inspection\."
+)
+
+
+def _structured_policy_answer(question: str, sources: list[dict]) -> tuple[str, str] | None:
+    """Render a reviewed rule when both the question and retrieved policy match."""
+    question = " ".join(question.split())
+    if _RETURN_WINDOW_QUESTION.fullmatch(question):
+        source_id = "returns.eligibility"
+        pattern = _RETURN_WINDOW_POLICY
+        template = "The return window is {days} calendar days from delivery."
+    elif _REFUND_PROCESSING_QUESTION.fullmatch(question):
+        source_id = "refunds.processing"
+        pattern = _REFUND_PROCESSING_POLICY
+        template = (
+            "For an approved return, refund processing starts after the returned item "
+            "has been received and inspected. Processing takes {minimum} to {maximum} "
+            "business days after inspection."
+        )
+    else:
+        return None
+
+    candidates = [source for source in sources if source["source_id"] == source_id]
+    if len(candidates) != 1:
+        return None
+    source = candidates[0]
+    # Match the whole rule so new conditions or conflicting text fall back.
+    rule = pattern.fullmatch(" ".join(source["content"].split()))
+    if rule is None:
+        return None
+    fields = rule.groupdict()
+    if source_id == "refunds.processing" and int(fields["minimum"]) > int(fields["maximum"]):
+        return None
+
+    answer = template.format(**fields)
+    return f"{answer}\nSource: {source_id} ({source['document']})", source_id
+
 
 POLICY_ANSWER_PROMPT = """
 Answer a customer policy question using only the retrieved policy passages.
@@ -87,6 +146,12 @@ class PolicyAnswerService:
             {key: match[key] for key in ("source_id", "document", "content")}
             for match in result["data"]["matches"]
         ]
+        structured = _structured_policy_answer(question, sources)
+        if structured is not None:
+            answer, source_id = structured
+            with span("policy.structured_answer", inputs={"rule": source_id}) as rule:
+                rule.output = answer
+            return answer
         by_id = {source["source_id"]: source for source in sources}
         payload = {"question": question, "sources": sources}
         for attempt in range(1, self._max_attempts + 1):

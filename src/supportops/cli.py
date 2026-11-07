@@ -107,7 +107,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 1
 
     try:
-        settings = load_settings()
+        try:
+            settings = load_settings()
+        except ValueError as exc:
+            print(f"Invalid configuration: {exc}", file=sys.stderr)
+            return 1
         store = Store()
         llm = make_llm(settings)
         policy_answers = PolicyAnswerService()

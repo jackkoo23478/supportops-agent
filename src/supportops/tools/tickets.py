@@ -8,10 +8,12 @@ from supportops.schemas import TicketRequest
 from supportops.store import Store
 from supportops.tickets import TicketConflictError, TicketStore
 from supportops.tools.common import error, ok
+from supportops.budget import budgeted_tool
 from supportops.tracing import traced
 
 
 @traced("tool.create_ticket", inputs=("request_id", "customer_id", "order_id", "description"))
+@budgeted_tool
 def create_ticket(
     store: Store,
     tickets: TicketStore,

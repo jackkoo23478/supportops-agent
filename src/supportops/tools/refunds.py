@@ -12,12 +12,14 @@ from supportops.refund_store import (
 )
 from supportops.store import Store
 from supportops.tools.common import error, ok
+from supportops.budget import budgeted_tool
 from supportops.tracing import traced
 
 
 @traced("tool.request_refund", inputs=(
     "request_id", "customer_id", "order_id", "amount", "requested_on",
 ))
+@budgeted_tool
 def request_refund(
     store: Store, refunds: RefundStore, contexts: RefundContextStore, *,
     request_id: str, customer_id: str, order_id: str, amount: str | Decimal,
@@ -76,6 +78,7 @@ class RefundExecutionInput(BaseModel):
 
 
 @traced("tool.execute_refund", inputs=("refund_id", "customer_id"))
+@budgeted_tool
 def execute_refund(
     store: Store, refunds: RefundStore, contexts: RefundContextStore, *,
     refund_id: str, customer_id: str,
